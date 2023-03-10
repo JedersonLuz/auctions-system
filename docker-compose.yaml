@@ -1,0 +1,39 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:latest'
+    container_name: auctions-system-db
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - '30432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: postgres
+    restart: always
+  # api:
+  #   build: backend
+  #   container_name: auctions-system-api
+  #   ports:
+  #     - '8000:8000'
+  #   env_file:
+  #     - ./backend/.env
+  #   environment:
+  #     DB_HOST: db
+  #     DB_PORT: 5432
+  #     DB_USER: postgres
+  #     DB_PASSWORD: mysecretpassword
+  #     DB_NAME: postgres
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - ./backend
+  # frontend:
+  #   build: frontend
+  #   container_name: auctions-system-frontend
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - api
+  #   restart: always
