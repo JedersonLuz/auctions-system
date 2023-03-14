@@ -122,6 +122,6 @@ class BidHistorySerializer(serializers.HyperlinkedModelSerializer):
             'customer_id',
             'real_estate_id',
             'vehicle_id',
-            'bid_value',
+            'value',
             'status',
         ]
