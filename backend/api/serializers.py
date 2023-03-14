@@ -26,7 +26,9 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Customer
         fields = [
+            'url',
             'name', 
+            'user',
             'email', 
             'phone', 
             'cpf', 
@@ -44,6 +46,7 @@ class FinancialInstitutionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = FinancialInstitution
         fields = [
+            'url',
             'name', 
             'email', 
             'phone', 
@@ -55,6 +58,7 @@ class AuctionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Auction
         fields = [
+            'url',
             'financial_institution_id', 
             'name',
             'description',
@@ -67,6 +71,7 @@ class RealEstateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RealEstate
         fields = [
+            'url',
             'auction_id',
             'type',
             'address',
@@ -94,6 +99,7 @@ class VehicleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vehicle
         fields = [
+            'url',
             'auction_id',
             'brand',
             'model',
@@ -118,6 +124,7 @@ class BidHistorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = BidHistory
         fields = [
+            'url',
             'auction_id',
             'customer_id',
             'real_estate_id',
