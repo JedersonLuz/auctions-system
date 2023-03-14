@@ -56,6 +56,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'server.urls'
+CSRF_TRUSTED_ORIGINS = [
+    'https://auctions-system.up.railway.app/'
+]
 
 TEMPLATES = [
     {
