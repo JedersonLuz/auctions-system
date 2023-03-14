@@ -27,7 +27,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -44,7 +44,22 @@ class CustomerViewSet(viewsets.ModelViewSet):
     """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.AllowAny],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class FinancialInstitutionViewSet(viewsets.ModelViewSet):
     """
