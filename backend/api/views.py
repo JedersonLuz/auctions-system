@@ -1,9 +1,8 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework import permissions
 from api.serializers import (
-    UserSerializer, 
-    GroupSerializer,
+    UserSerializer,
     CustomerSerializer,
     FinancialInstitutionSerializer,
     AuctionSerializer,
@@ -27,16 +26,22 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
 
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class CustomerViewSet(viewsets.ModelViewSet):
     """
@@ -44,7 +49,22 @@ class CustomerViewSet(viewsets.ModelViewSet):
     """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class FinancialInstitutionViewSet(viewsets.ModelViewSet):
     """
@@ -52,7 +72,22 @@ class FinancialInstitutionViewSet(viewsets.ModelViewSet):
     """
     queryset = FinancialInstitution.objects.all()
     serializer_class = FinancialInstitutionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class AuctionViewSet(viewsets.ModelViewSet):
     """
@@ -60,7 +95,22 @@ class AuctionViewSet(viewsets.ModelViewSet):
     """
     queryset = Auction.objects.all()
     serializer_class = AuctionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class RealEstateViewSet(viewsets.ModelViewSet):
     """
@@ -68,7 +118,22 @@ class RealEstateViewSet(viewsets.ModelViewSet):
     """
     queryset = RealEstate.objects.all()
     serializer_class = RealEstateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class VehicleViewSet(viewsets.ModelViewSet):
     """
@@ -76,7 +141,22 @@ class VehicleViewSet(viewsets.ModelViewSet):
     """
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    permission_classes_by_action = {
+        'create': [permissions.IsAdminUser],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 class BidHistoryViewSet(viewsets.ModelViewSet):
     """
@@ -84,4 +164,19 @@ class BidHistoryViewSet(viewsets.ModelViewSet):
     """
     queryset = BidHistory.objects.all()
     serializer_class = BidHistorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    permission_classes_by_action = {
+        'create': [permissions.IsAuthenticated],
+        'list': [permissions.IsAuthenticated],
+        'retrieve': [permissions.IsAuthenticated],
+        'update': [permissions.IsAdminUser],
+        'destroy': [permissions.IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]

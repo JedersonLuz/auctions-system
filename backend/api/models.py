@@ -1,9 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Model of a customer
 class Customer(models.Model):
     # The customer's id
     id = models.AutoField(primary_key=True)
+    # The customer's user id
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Created at
     created_at = models.DateTimeField(auto_now_add=True)
     # Updated at
