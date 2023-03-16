@@ -60,7 +60,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'server.urls'
 CSRF_TRUSTED_ORIGINS = [
-    'https://auctions-system.up.railway.app/'
+    '*',
+    'http://auctions-system.up.railway.app',
+    'https://auctions-system.up.railway.app'
 ]
 
 TEMPLATES = [
