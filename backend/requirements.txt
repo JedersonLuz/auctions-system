@@ -23,3 +23,5 @@ rich==13.3.2
 sqlparse==0.4.3
 urllib3==1.26.15
 whitenoise==6.4.0
+python-dotenv==1.0.0
+gunicorn==20.1.0
