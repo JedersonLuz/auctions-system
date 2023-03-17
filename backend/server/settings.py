@@ -60,7 +60,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'server.urls'
 CSRF_TRUSTED_ORIGINS = [
-    'https://auctions-system.up.railway.app/'
+    '*',
+    'http://auctions-system.up.railway.app',
+    'https://auctions-system.up.railway.app'
 ]
 
 TEMPLATES = [
@@ -141,6 +143,9 @@ STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }

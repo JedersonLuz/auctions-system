@@ -152,11 +152,11 @@ class RealEstate(models.Model):
     # The real state's minimum bid increment
     minimum_bid_increment = models.FloatField()
     # The real state's description
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     # The real state's image
-    images_url = models.CharField(max_length=200)
+    images_url = models.CharField(max_length=200, null=True, blank=True)
     # The real state's documents
-    documents_url = models.CharField(max_length=200)
+    documents_url = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.address + ', ' + self.number + ' - ' + self.city + '/' + self.state
@@ -196,15 +196,21 @@ class Vehicle(models.Model):
     # The vehicle's category
     category = models.CharField(max_length=50)
     # The vehicle's status
-    status = models.CharField(max_length=50)
+    status = models.CharField(
+        max_length=50, 
+        choices=(
+            ('novo', 'Novo'),
+            ('semi', 'Semi-novo'),
+            ('usado', 'Usado')
+        ))
     # The real state's minimum bid
     minimum_bid = models.FloatField()
     # The real state's minimum bid increment
     minimum_bid_increment = models.FloatField()
     # The vehicle's description
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     # The vehicle's image
-    images_url = models.CharField(max_length=200)
+    images_url = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.brand + ' ' + self.model
@@ -227,7 +233,7 @@ class BidHistory(models.Model):
     # The bid history's value
     value = models.FloatField()
     # The bid history's status
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.value
