@@ -66,6 +66,7 @@ class RealEstateSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'url',
             'auction_id',
+            'created_at',
             'type',
             'address',
             'number',
@@ -89,11 +90,14 @@ class RealEstateSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 class VehicleSerializer(serializers.HyperlinkedModelSerializer):
+    auction_id = AuctionSerializer(read_only=True)
+
     class Meta:
         model = Vehicle
         fields = [
             'url',
             'auction_id',
+            'created_at',
             'brand',
             'model',
             'version',

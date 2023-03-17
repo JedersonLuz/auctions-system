@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
+
 from rest_framework import viewsets
 from rest_framework import permissions
+
 from api.serializers import (
     UserSerializer,
     CustomerSerializer,
@@ -10,6 +12,7 @@ from api.serializers import (
     VehicleSerializer,
     BidHistorySerializer
 )
+
 from .models import (
     Customer,
     FinancialInstitution,
@@ -116,7 +119,7 @@ class RealEstateViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = RealEstate.objects.all()
+    queryset = RealEstate.objects.all().order_by('-created_at')
     serializer_class = RealEstateSerializer
     
     permission_classes_by_action = {
@@ -139,7 +142,7 @@ class VehicleViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = Vehicle.objects.all()
+    queryset = Vehicle.objects.all().order_by('-created_at')
     serializer_class = VehicleSerializer
     
     permission_classes_by_action = {
