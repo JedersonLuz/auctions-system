@@ -12,29 +12,29 @@ class Customer(models.Model):
     # Updated at
     updated_at = models.DateTimeField(auto_now=True)
     # The customer's name
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     # The customer's email
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
     # The customer's phone
-    phone = models.CharField(max_length=50)
+    phone = models.CharField(max_length=100)
     # The customer's cpf
-    cpf = models.CharField(max_length=50)
+    cpf = models.CharField(max_length=100)
     # The customer's address
-    address = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
     # The customer's number
     number = models.IntegerField()
     # The customer's complement
-    complement = models.CharField(max_length=50, blank=True)
+    complement = models.CharField(max_length=100, blank=True)
     # The customer's neighborhood
-    neighborhood = models.CharField(max_length=50)
+    neighborhood = models.CharField(max_length=100)
     # The customer's city
-    city = models.CharField(max_length=50)
+    city = models.CharField(max_length=100)
     # The customer's state
-    state = models.CharField(max_length=50)
+    state = models.CharField(max_length=100)
     # The customer's zip code
-    zip_code = models.CharField(max_length=50)
+    zip_code = models.CharField(max_length=100)
     # The customer's status
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -48,15 +48,15 @@ class FinancialInstitution(models.Model):
     # Updated at
     updated_at = models.DateTimeField(auto_now=True)
     # The financial institution's name
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     # The financial institution's email
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
     # The financial institution's phone
-    phone = models.CharField(max_length=50)
+    phone = models.CharField(max_length=100)
     # The financial institution's cnpj
-    cnpj = models.CharField(max_length=50)
+    cnpj = models.CharField(max_length=100)
     # The financial institution's status
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -72,7 +72,7 @@ class Auction(models.Model):
     # Financial institution's id of the auction
     financial_institution_id = models.ForeignKey(FinancialInstitution, on_delete=models.CASCADE)
     # The auction's name
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     # The auction's description
     description = models.CharField(max_length=200)
     # The auction's start date
@@ -80,7 +80,7 @@ class Auction(models.Model):
     # The auction's end date
     end_date = models.DateTimeField()
     # The auction's status
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -107,19 +107,19 @@ class RealEstate(models.Model):
         )
     )
     # The real state's address
-    address = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
     # The real state's number
     number = models.IntegerField()
     # The real state's complement
-    complement = models.CharField(max_length=50)
+    complement = models.CharField(max_length=100, blank=True)
     # The real state's neighborhood
-    neighborhood = models.CharField(max_length=50)
+    neighborhood = models.CharField(max_length=100)
     # The real state's city
-    city = models.CharField(max_length=50)
+    city = models.CharField(max_length=100)
     # The real state's state
-    state = models.CharField(max_length=50)
+    state = models.CharField(max_length=100)
     # The real state's zip code
-    zip_code = models.IntegerField()
+    zip_code = models.CharField(max_length=100)
     # The real state's GPS latitude
     latitude = models.FloatField()
     # The real state's GPS longitude
@@ -159,7 +159,7 @@ class RealEstate(models.Model):
     documents_url = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return self.address + ', ' + self.number + ' - ' + self.city + '/' + self.state
+        return self.address + ', ' + str(self.number) + ' - ' + self.city + '/' + self.state
 
 # Model of a vehicle to be selled in a auction
 class Vehicle(models.Model):
@@ -172,32 +172,32 @@ class Vehicle(models.Model):
     # Updated at
     updated_at = models.DateTimeField(auto_now=True)
     # The vehicle's brand
-    brand = models.CharField(max_length=50)
+    brand = models.CharField(max_length=100)
     # The vehicle's model
-    model = models.CharField(max_length=50)
+    model = models.CharField(max_length=100)
     # The vehicle's version
-    version = models.CharField(max_length=50)
+    version = models.CharField(max_length=100)
     # The vehicle's chassis
-    chassis = models.CharField(max_length=50)
+    chassis = models.CharField(max_length=100)
     # The vehicle's plate
-    plate = models.CharField(max_length=50)
+    plate = models.CharField(max_length=100)
     # The vehicle's mileage
     mileage = models.IntegerField()
     # The vehicle's year
     year = models.IntegerField()
     # The vehicle's color
-    color = models.CharField(max_length=50)
+    color = models.CharField(max_length=100)
     # The vehicle's fuel type
-    fuel_type = models.CharField(max_length=50)
+    fuel_type = models.CharField(max_length=100)
     # The vehicle's transmission
-    transmission = models.CharField(max_length=50)
+    transmission = models.CharField(max_length=100)
     # The vehicle's doors
     doors = models.IntegerField()
     # The vehicle's category
-    category = models.CharField(max_length=50)
+    category = models.CharField(max_length=100)
     # The vehicle's status
     status = models.CharField(
-        max_length=50, 
+        max_length=100, 
         choices=(
             ('novo', 'Novo'),
             ('semi', 'Semi-novo'),
@@ -233,7 +233,7 @@ class BidHistory(models.Model):
     # The bid history's value
     value = models.FloatField()
     # The bid history's status
-    status = models.CharField(max_length=50, null=True, blank=True)
+    status = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.value
