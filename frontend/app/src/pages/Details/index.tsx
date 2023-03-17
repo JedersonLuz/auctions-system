@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { FiPower } from 'react-icons/fi';
 
@@ -6,7 +6,7 @@ import api from '../../services/api';
 
 import './styles.css';
 
-import logoImg from '../../assets/logo.svg';
+import logoImg from '../../assets/lion-logo.png';
 
 interface RealEstate {
   url: string,
@@ -75,6 +75,16 @@ export default function Details() {
       });
   }, [params.type, params.id, access]);
 
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    // await api.post('/orphanages', data);
+
+    alert('Cadastro bem sucedido!');
+
+    // history.push('/app');
+  }
+
   function handleLogOut() {
     localStorage.clear();
 
@@ -92,7 +102,7 @@ export default function Details() {
   return (
     <div className="details-container">
       <header>
-        <img src={logoImg} alt="Be The Hero" />
+        <img src={logoImg} alt="Lion" />
 
         <button onClick={handleLogOut} type="button">
           <FiPower size={18} color="#E02041" />
@@ -122,7 +132,7 @@ export default function Details() {
             )}
           </p>
 
-          <form onSubmit={() => { }}>
+          <form onSubmit={handleSubmit}>
             <input type="number" placeholder="Informe o valor do seu lance" /* value={id} onChange={e => setId(e.target.value)} */ />
             <button className="button">
               Dar lance
@@ -151,7 +161,7 @@ export default function Details() {
             )}
           </p>
 
-          <form onSubmit={() => { }}>
+          <form onSubmit={handleSubmit}>
             <input type="number" placeholder="Informe o valor do seu lance" /* value={id} onChange={e => setId(e.target.value)} */ />
             <button className="button">
               Dar lance
