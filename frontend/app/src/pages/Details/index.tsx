@@ -122,11 +122,6 @@ export default function Details() {
             )}
           </p>
 
-          <Link className="details-button" to="/home">
-            Ver mais detalhes
-            <FiArrowRight size={16} color="#6C63FF" />
-          </Link>
-
           <form onSubmit={() => { }}>
             <input type="number" placeholder="Informe o valor do seu lance" /* value={id} onChange={e => setId(e.target.value)} */ />
             <button className="button">
@@ -156,11 +151,6 @@ export default function Details() {
             )}
           </p>
 
-          <Link className="details-button" to="/home">
-            Ver mais detalhes
-            <FiArrowRight size={16} color="#6C63FF" />
-          </Link>
-
           <form onSubmit={() => { }}>
             <input type="number" placeholder="Informe o valor do seu lance" /* value={id} onChange={e => setId(e.target.value)} */ />
             <button className="button">
@@ -169,27 +159,6 @@ export default function Details() {
           </form>
         </div>
       )}
-      {/* <strong>Descição:</strong>
-        <p>
-          Jeep Compass 2021/2022
-        </p>
-
-        <strong className="details-incident-property">Produto:</strong>
-        <p className="details-incident-value">Carro</p>
-
-        <strong className="details-incidentProperty">Lance mínimo:</strong>
-        <p className="details-incident-value">
-          {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-            150000
-          )}
-        </p>
-        
-        <form onSubmit={() => {}}>
-          <input type="number" placeholder="Informe o valor do seu lance" value={id} onChange={e => setId(e.target.value)} />
-          <button className="button">
-            Dar lance
-          </button>
-        </form> */}
     </div>
   );
 }
