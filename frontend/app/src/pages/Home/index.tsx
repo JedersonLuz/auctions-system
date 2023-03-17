@@ -1,46 +1,92 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiArrowLeft, FiArrowRight, FiPower, FiTrash2 } from 'react-icons/fi';
+import { FiArrowRight, FiPower } from 'react-icons/fi';
 
-// import api from '../../services/api';
+import api from '../../services/api';
 
 import './styles.css';
 
-import logoImg from '../../assets/logo.svg';
+import logoImg from '../../assets/lion-logo.png';
 
-export default function Profile() {
-  const [products, setProducts] = useState([]);
+interface RealEstate {
+  url: string,
+  auction_id: string,
+  type: string,
+  address: string,
+  number: string,
+  complement: string,
+  neighborhood: string,
+  city: string,
+  state: string,
+  zip_code: string,
+  latitude: number,
+  longitude: number,
+  area_total: number,
+  building_area: number,
+  status: string,
+  condition: string,
+  rooms: number,
+  minimum_bid: number,
+  minimum_bid_increment: number,
+}
+
+interface Vehicle {
+  url: string,
+  auction_id: string,
+  brand: string,
+  model: string,
+  version: string,
+  chassis: string,
+  plate: string,
+  mileage: number,
+  year: number,
+  color: string,
+  fuel_type: string,
+  transmission: string,
+  doors: number,
+  category: string,
+  status: string,
+  minimum_bid: number,
+  minimum_bid_increment: number,
+}
+
+export default function Home() {
+  const [realEstate, setRealEstate] = useState<RealEstate[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [products, setProducts] = useState<(RealEstate|Vehicle)[]>([]);
 
   const history = useHistory();
 
-  // const ongName = localStorage.getItem('ongName');
-  // const ongId = localStorage.getItem('ongId');
+  const username = localStorage.getItem('username');
+  const access = localStorage.getItem('access');
+  // const refresh = localStorage.getItem('refresh');
 
-  // useEffect(() => {
-  //   api
-  //     .get('profile', {
-  //       headers: {
-  //         Authorization: ongId,
-  //       },
-  //     })
-  //     .then(response => {
-  //       setIncidents(response.data);
-  //     });
-  // }, [ongId]);
+  useEffect(() => {
+    api.get('real-estates', {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    })
+    .then(response => {
+      setRealEstate(response.data.results);
+    });
+    api.get('vehicles', {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    })
+    .then(response => {
+      setVehicles(response.data.results);
+    });
+  }, [access]);
 
-  // async function handleDeleteIncident(id) {
-  //   try {
-  //     await api.delete(`incidents/${id}`, {
-  //       headers: {
-  //         Authorization: ongId,
-  //       },
-  //     });
+  useEffect(() => {
+    setProducts([...realEstate, ...vehicles]);
+  }, [realEstate, vehicles]);
 
-  //     setIncidents(incidents.filter(incident => incident.id !== id));
-  //   } catch (err) {
-  //     alert('Erro ao deletar caso. Tente novamente.');
-  //   }
-  // }
+  function instanceOfRealEstate(object: any): object is RealEstate {
+    return 'address' in object;
+  }
 
   function handleLogOut() {
     localStorage.clear();
@@ -52,8 +98,8 @@ export default function Profile() {
     <div className="products-container">
       <header>
         <div>
-          <img src={logoImg} alt="Be The Hero" />
-          <span>Bem vindo, Usuário {/* {ongName} */}</span>
+          <img src={logoImg} alt="Lion" />
+          <span>Bem vindo, { username }</span>
         </div>
 
         {/* <Link className="button" to="/products/new">
@@ -68,64 +114,65 @@ export default function Profile() {
       <h1>Produtos em Leilão</h1>
 
       <ul>
-        {/* {{products.map(incident => (
-          <li key={incident.id}>
-            <strong>CASO:</strong>
-            <p>{incident.title}</p>
+        {products.map(product => {
+          if (instanceOfRealEstate(product)) {
+            return (
+              <li key={product.url}>
+                <strong>Produto:</strong>
+                <p>{ product.type }</p>
 
-            <strong>DESCRIÇÃO:</strong>
-            <p>{incident.description}</p>
+                <strong>Endereço:</strong>
+                <p>{ `${ product.address }, ${ product.number } - ${ product.city }/${ product.state }` }</p>
 
-            <strong>VALOR:</strong>
-            <p>
-              {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-                incident.value
-              )}
-            </p>
+                <strong>Área total:</strong>
+                <p>{ product.area_total } m²</p>
 
-            <button onClick={() => handleDeleteIncident(incident.id)}>
-              <FiTrash2 size={20} color="#a8a8b3" />
-            </button>
-          </li>
-        ))}} */}
-        <li>
-          <strong>Produto:</strong>
-          <p>Terreno</p>
+                <strong>Área construída:</strong>
+                <p>{ product.building_area } m²</p>
+                
+                <strong>Lance mínimo:</strong>
+                <p>
+                  {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                    product.minimum_bid
+                  )}
+                </p>
+                
+                <Link className="details-button" to={`/details/real-estates/${product.url.split('/').slice(-2, -1)}`}>
+                  Ver mais detalhes
+                  <FiArrowRight size={16} color="#6C63FF" />
+                </Link>
+              </li>
+            );
+          } else {
+            return (
+              <li key={product.url}>
+                <strong>Produto:</strong>
+                <p>{ product.category }</p>
 
-          <strong>Descrição:</strong>
-          <p>Terreno de 2 hectares</p>
+                <strong>Marca:</strong>
+                <p>{ product.brand }</p>
 
-          <strong>Lance mínimo:</strong>
-          <p>
-            {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-              100000
-            )}
-          </p>
+                <strong>Modelo:</strong>
+                <p>{ product.model }</p>
 
-          <Link className="details-button" to="/home">
-            Ver mais detalhes
-            <FiArrowRight size={16} color="#6C63FF" />
-          </Link>
-        </li>
-        <li>
-          <strong>Produto:</strong>
-          <p>Carro</p>
+                <strong>Versão:</strong>
+                <p>{ product.version }</p>
 
-          <strong>Descrição:</strong>
-          <p>Jeep Compass</p>
+                <strong>Lance mínimo:</strong>
+                <p>
+                  {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                    product.minimum_bid
+                  )}
+                </p>
 
-          <strong>Lance mínimo:</strong>
-          <p>
-            {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-              150000
-            )}
-          </p>
-
-          <Link className="details-button" to="/home">
-            Ver mais detalhes
-            <FiArrowRight size={16} color="#6C63FF" />
-          </Link>
-        </li>
+                <Link className="details-button" to={`/details/vehicles/${product.url.split('/').slice(-2, -1)}`}>
+                  Ver mais detalhes
+                  <FiArrowRight size={16} color="#6C63FF" />
+                </Link>
+              </li>
+            );
+          }
+        })}
       </ul>
     </div>
   );

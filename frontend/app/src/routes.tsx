@@ -11,7 +11,7 @@ function Routes() {
       <Switch>
         <Route path='/' exact component={Login} />
         <Route path='/home' component={Home} />
-        <Route path='/details' component={Details} />
+        <Route path='/details/:type/:id' component={Details} />
       </Switch>
     </BrowserRouter>
   );

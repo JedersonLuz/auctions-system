@@ -1,16 +1,14 @@
 import React, { useState, ChangeEvent } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { FiLogIn } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
 
-// import api from '../../services/api';
+import api from '../../services/api';
 
 import './styles.css';
 
-import logoImg from '../../assets/logo.svg';
-import heroesImg from '../../assets/auction.png';
+import logoImg from '../../assets/lion-logo.png';
 
 export default function Login() {
-  const [id, setId] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const history = useHistory();
@@ -19,12 +17,13 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      // const response = await api.post('sessions', { id });
+      const response = await api.post('api/token/', { username, password });
 
-      // localStorage.setItem('ongId', id);
-      // localStorage.setItem('ongName', response.data.name);
+      localStorage.setItem('username', username);
+      localStorage.setItem('access', response.data.access);
+      localStorage.setItem('refresh', response.data.refresh);
 
-      history.push('/profile');
+      history.push('/home');
     } catch (err) {
       alert('Falha no login, tente novamente.');
     }
@@ -33,12 +32,10 @@ export default function Login() {
   return (
     <div className="login-container">
       <section className="form">
-        <img src={logoImg} alt="Be The Hero" />
-
         <form onSubmit={handleLogIn}>
           <h1>Faça seu login</h1>
 
-          <input placeholder="Seu nome de usuário" value={id} onChange={e => setId(e.target.value)} />
+          <input placeholder="Seu nome de usuário" value={username} onChange={e => setUsername(e.target.value)} />
           <input placeholder="Sua senha" type="password" value={password} onChange={e => setPassword(e.target.value)} />
           <button className="button" type="submit">
             Entrar
@@ -46,7 +43,7 @@ export default function Login() {
         </form>
       </section>
 
-      <img src={heroesImg} alt="Heroes" />
+      <img src={logoImg} alt="Lion" />
     </div>
   );
 }
