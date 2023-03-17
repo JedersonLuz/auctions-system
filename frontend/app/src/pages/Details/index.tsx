@@ -73,7 +73,7 @@ export default function Details() {
       .then(response => {
         setProduct(response.data);
       });
-  }, [params.type, params.id]);
+  }, [params.type, params.id, access]);
 
   function handleLogOut() {
     localStorage.clear();
