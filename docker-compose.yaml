@@ -13,27 +13,35 @@ services:
       POSTGRES_DB: postgres
     restart: always
   api:
-    build: backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.backend
     container_name: auctions-system-api
+    command: python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - '8000:8000'
     env_file:
       - ./backend/.env
     environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: mysecretpassword
-      DB_NAME: postgres
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: mysecretpassword
+      PGDATABASE: postgres
     depends_on:
       - db
     volumes:
-      - ./backend
+      - ./backend:/code
   frontend:
-    build: frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
     container_name: auctions-system-frontend
     ports:
       - '3000:3000'
     depends_on:
       - api
+    volumes:
+      - ./frontend/app:/app
     restart: always
