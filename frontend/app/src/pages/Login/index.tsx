@@ -45,6 +45,7 @@ export default function Login() {
 
       history.push('/home');
     } catch (err) {
+      console.log(err);
       alert('Falha no login, tente novamente.');
     }
   }
