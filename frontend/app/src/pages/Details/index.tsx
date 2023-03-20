@@ -55,14 +55,27 @@ interface ProductsParams {
   type: string;
 }
 
+interface BidHistory {
+  auction_id: string,
+  customer_id: string,
+  real_estate_id: string,
+  vehicle_id: string,
+  value: number,
+  status: string,
+}
+
 export default function Details() {
   const history = useHistory();
 
+  const username = localStorage.getItem('username');
   const access = localStorage.getItem('access');
   // const refresh = localStorage.getItem('refresh');
+  const customer_id = localStorage.getItem('customer_id');
 
   const params = useParams<ProductsParams>();
   const [product, setProduct] = useState<RealEstate | Vehicle>();
+  const [lastBid, setLastBid] = useState<number>(0);
+  const [bid, setBid] = useState<number>(0);
 
   useEffect(() => {
     api.get(`${params.type}/${params.id}`, {
@@ -71,18 +84,75 @@ export default function Details() {
       },
     })
       .then(response => {
+        console.log(response.data);
         setProduct(response.data);
+      });
+
+    api.get(`/bid-histories/?product_type=${params.type}&product_id=${params.id}`, {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    })
+      .then(response => {
+        console.log(response.data);
+        if (response.data.results.length > 0) {
+          setLastBid(response.data.results[0].value);
+        }
       });
   }, [params.type, params.id, access]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    // await api.post('/orphanages', data);
+    if (!product || !customer_id) {
+      alert('Erro ao carregar o produto.');
+      return;
+    }
+
+    if (lastBid === 0 && bid < product.minimum_bid) {
+      alert('O valor da sua oferta deve ser maior ou igual ao valor mínimo.');
+      return;
+    } else
+
+    if (bid < (lastBid + product.minimum_bid_increment)) {
+      alert('O valor da sua oferta deve ser maior que o valor da última oferta + o incremento mínimo.');
+      return;
+    }
+
+    const data: BidHistory = {
+      auction_id: product.auction_id,
+      customer_id: customer_id,
+      real_estate_id: '',
+      vehicle_id: '',
+      value: bid,
+      status: '',
+    };
+
+    if (product && instanceOfRealEstate(product)) {
+      data.real_estate_id = product.url;
+    } else if (product && instanceOfVehicle(product)) {
+      data.vehicle_id = product.url;
+    }
+
+    console.log(data);
+
+    const response = await api.post('/bid-histories/', data, {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    });
+
+    if (response.status !== 201) {
+      alert('Erro ao cadastrar o produto.');
+      return;
+    }
+
+    console.log(response.data);
+    setLastBid(bid);
 
     alert('Cadastro bem sucedido!');
 
-    // history.push('/app');
+    // history.push('/home');
   }
 
   function handleLogOut() {
@@ -102,7 +172,10 @@ export default function Details() {
   return (
     <div className="details-container">
       <header>
-        <img src={logoImg} alt="Lion" />
+        <div>
+          <img src={logoImg} alt="Lion" />
+          <span>Bem vindo, { username }</span>
+        </div>
 
         <button onClick={handleLogOut} type="button">
           <FiPower size={18} color="#E02041" />
@@ -112,7 +185,7 @@ export default function Details() {
       <h1>Detalhes do Produto</h1>
 
       {product && instanceOfRealEstate(product) && (
-        <div>
+        <div className="info-container">
           <strong>Produto:</strong>
           <p>{product.type}</p>
 
@@ -125,6 +198,20 @@ export default function Details() {
           <strong>Área construída:</strong>
           <p>{product.building_area} m²</p>
 
+          <strong>Último lance:</strong>
+          <p>
+            {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+              lastBid
+            )}
+          </p>
+
+          <strong>Incremento mínimo:</strong>
+          <p>
+            {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+              product.minimum_bid_increment
+            )}
+          </p>
+
           <strong>Lance mínimo:</strong>
           <p>
             {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
@@ -133,7 +220,7 @@ export default function Details() {
           </p>
 
           <form onSubmit={handleSubmit}>
-            <input type="number" placeholder="Informe o valor do seu lance" /* value={id} onChange={e => setId(e.target.value)} */ />
+            <input type="number" placeholder="Informe o valor do seu lance" value={ bid } onChange={ e => setBid(Number(e.target.value)) } />
             <button className="button">
               Dar lance
             </button>
@@ -141,7 +228,7 @@ export default function Details() {
         </div>
       )}
       {product && instanceOfVehicle(product) && (
-        <div>
+        <div className='info-container'>
           <strong>Produto:</strong>
           <p>{product.category}</p>
 
@@ -154,6 +241,20 @@ export default function Details() {
           <strong>Versão:</strong>
           <p>{product.version}</p>
 
+          <strong>Último lance:</strong>
+          <p>
+            {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+              lastBid
+            )}
+          </p>
+
+          <strong>Incremento mínimo:</strong>
+          <p>
+            {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+              product.minimum_bid_increment
+            )}
+          </p>
+
           <strong>Lance mínimo:</strong>
           <p>
             {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
@@ -162,7 +263,7 @@ export default function Details() {
           </p>
 
           <form onSubmit={handleSubmit}>
-            <input type="number" placeholder="Informe o valor do seu lance" /* value={id} onChange={e => setId(e.target.value)} */ />
+          <input type="number" placeholder="Informe o valor do seu lance" value={ bid } onChange={ e => setBid(Number(e.target.value)) } />
             <button className="button">
               Dar lance
             </button>

@@ -90,8 +90,6 @@ class RealEstateSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 class VehicleSerializer(serializers.HyperlinkedModelSerializer):
-    auction_id = AuctionSerializer(read_only=True)
-
     class Meta:
         model = Vehicle
         fields = [

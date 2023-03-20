@@ -17,11 +17,31 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      const response = await api.post('api/token/', { username, password });
+      let response = await api.post('api/token/', { username, password });
+
+      const access = response.data.access;
+      const refresh = response.data.refresh;
 
       localStorage.setItem('username', username);
-      localStorage.setItem('access', response.data.access);
-      localStorage.setItem('refresh', response.data.refresh);
+      localStorage.setItem('access', access);
+      localStorage.setItem('refresh', refresh);
+
+      response = await api.get(`users/?username=${username}`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+
+      const user = response.data.results[0].url.split('/').slice(-2, -1)[0];
+      response = await api.get(`customers/?user=${user}`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+
+      const customer_id = response.data.results[0].url;
+
+      localStorage.setItem('customer_id', customer_id);
 
       history.push('/home');
     } catch (err) {

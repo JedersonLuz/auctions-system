@@ -223,9 +223,9 @@ class BidHistory(models.Model):
     # The customer's id that the bid history belongs to
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     # The real estate's id that the bid history belongs to
-    real_estate_id = models.ForeignKey(RealEstate, on_delete=models.CASCADE, null=True)
+    real_estate_id = models.ForeignKey(RealEstate, on_delete=models.CASCADE, null=True, blank=True)
     # The vehicle's id that the bid history belongs to
-    vehicle_id = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True)
+    vehicle_id = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
     # The bid history's creation date
     created_at = models.DateTimeField(auto_now_add=True)
     # Updated at
@@ -236,4 +236,4 @@ class BidHistory(models.Model):
     status = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return self.value
+        return self.customer_id.name + ' - ' + str(self.value)

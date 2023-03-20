@@ -7,6 +7,12 @@
 
 .details-container header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.details-container header div {
+  display: flex;
   align-items: center;
 }
 
@@ -44,24 +50,24 @@
   margin-bottom: 24px;
 }
 
-.details-container div {
+.details-container .info-container {
   background: #fff;
   padding: 24px;
   border-radius: 8px;
   position: relative;
 }
 
-.details-container div strong {
+.details-container .info-container strong {
   display: block;
   margin-bottom: 16px;
   color: #41414d;
 }
 
-.details-container div strong:not(:first-child) {
+.details-container .info-container strong:not(:first-child) {
   margin-top: 32px;
 }
 
-.details-container div p {
+.details-container .info-container p {
   color: #737380;
   line-height: 21px;
   font-size: 16px;

@@ -38,6 +38,13 @@ class UserViewSet(viewsets.ModelViewSet):
         'destroy': [permissions.IsAdminUser],
     }
 
+    def get_queryset(self):
+        queryset = User.objects.all()
+        username = self.request.query_params.get('username')
+        if username is not None:
+            queryset = queryset.filter(username=username)
+        return queryset
+
     def get_permissions(self):
         try:
             # return permission_classes depending on `action` 
@@ -60,6 +67,13 @@ class CustomerViewSet(viewsets.ModelViewSet):
         'update': [permissions.IsAdminUser],
         'destroy': [permissions.IsAdminUser],
     }
+
+    def get_queryset(self):
+        queryset = Customer.objects.all()
+        user = self.request.query_params.get('user')
+        if user is not None:
+            queryset = queryset.filter(user=user)
+        return queryset
 
     def get_permissions(self):
         try:
@@ -175,6 +189,17 @@ class BidHistoryViewSet(viewsets.ModelViewSet):
         'update': [permissions.IsAdminUser],
         'destroy': [permissions.IsAdminUser],
     }
+
+    def get_queryset(self):
+        queryset = BidHistory.objects.all()
+        product_type = self.request.query_params.get('product_type')
+        product_id = self.request.query_params.get('product_id')
+        if product_type is not None and product_id is not None:
+            if product_type == 'vehicles':
+                queryset = queryset.filter(vehicle_id=product_id).order_by('-created_at')
+            elif product_type == 'real-estates':
+                queryset = queryset.filter(real_estate_id=product_id).order_by('-created_at')
+        return queryset
 
     def get_permissions(self):
         try:
